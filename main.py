@@ -50,8 +50,7 @@ def analyze_msg(raws, a):
     msg = pyzmail.PyzMessage.factory(raws[a][b'BODY[]'])
     sender = msg.get_address("from")
     # Check if a valid sender
-    if isValidSender(sender[1]):
-        print("valid" + sender[1])
+    if not isValidSender(sender[1]):
         return None
     global subject
     if msg.text_part is None:
