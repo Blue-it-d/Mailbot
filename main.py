@@ -3,7 +3,7 @@ import imapclient
 import pyzmail
 import time
 
-TRUSTED_SENDER = ("test@hotmail.com", "test2@hotmail.com",)
+TRUSTED_SENDERS = ("test@hotmail.com", "test2@hotmail.com",)
 
 
 def imap_init():
@@ -25,18 +25,18 @@ def build_search_query():
      Retrun only unseen Emails and from trusted Email-Addresses.
     '''
     searchQuery = []
-    if (len(TRUSTED_SENDER) == 1):
-        searchQuery.append("FROM" + TRUSTED_SENDER[0])
-    if (len(TRUSTED_SENDER) == 2):
+    if (len(TRUSTED_SENDERS) == 1):
+        searchQuery.append("FROM" + TRUSTED_SENDERS[0])
+    if (len(TRUSTED_SENDERS) == 2):
         searchQuery.append("OR")
-        searchQuery.append(["FROM", TRUSTED_SENDER[0]])
-        searchQuery.append(["FROM", TRUSTED_SENDER[1]])
-    if (len(TRUSTED_SENDER) > 2):
+        searchQuery.append(["FROM", TRUSTED_SENDERS[0]])
+        searchQuery.append(["FROM", TRUSTED_SENDERS[1]])
+    if (len(TRUSTED_SENDERS) > 2):
         searchQuery.append("OR")
-        searchQuery.append(["FROM", TRUSTED_SENDER[0]])
-        searchQuery.append(["FROM", TRUSTED_SENDER[1]])
-        for m in range(2, len(TRUSTED_SENDER)):
-            searchQuery.insert(0, ["FROM", TRUSTED_SENDER[m]])
+        searchQuery.append(["FROM", TRUSTED_SENDERS[0]])
+        searchQuery.append(["FROM", TRUSTED_SENDERS[1]])
+        for m in range(2, len(TRUSTED_SENDERS)):
+            searchQuery.insert(0, ["FROM", TRUSTED_SENDERS[m]])
             searchQuery.insert(0, "OR")
             searchQuery.insert(0, "UNSEEN")
     print("search", searchQuery)
@@ -63,7 +63,7 @@ def isValidSender(sender):
     Check if the given sender is valid
     It compars it with vordefined arrays
     """
-    if sender not in TRUSTED_SENDER:
+    if sender not in TRUSTED_SENDERS:
         print("Unread is from %s skipping" % (sender))
         return False
     return True
