@@ -17,3 +17,6 @@ pwd = getpass.getpass("Account password:")
 
 
 check_freq = 5
+
+
+commands = {"hello": "xx"}

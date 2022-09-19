@@ -1,9 +1,9 @@
-
 from config import *
 import imapclient
 import pyzmail
+import time
 
-TRUSTED_SENDER = ("test@hotmail.com", "test2@hotmail.com")
+TRUSTED_SENDER = ("test@hotmail.com", "test2@hotmail.com",)
 
 
 def imap_init():
@@ -14,9 +14,33 @@ def imap_init():
     global i
     i = imapclient.IMAPClient(imapserver)
     c = i.login(bot_address, pwd)
-    i.select_folder("INBOX", readonly=True)
+    select_info = i.select_folder("INBOX", readonly=True)
+    print('%d messages in INBOX' % select_info[b'EXISTS'])
     # i.select_folder("INBOX")
     print("DONE. ")
+
+
+def build_search_query():
+    '''
+     Retrun only unseen Emails and from trusted Email-Addresses.
+    '''
+    searchQuery = []
+    if (len(TRUSTED_SENDER) == 1):
+        searchQuery.append("FROM" + TRUSTED_SENDER[0])
+    if (len(TRUSTED_SENDER) == 2):
+        searchQuery.append("OR")
+        searchQuery.append(["FROM", TRUSTED_SENDER[0]])
+        searchQuery.append(["FROM", TRUSTED_SENDER[1]])
+    if (len(TRUSTED_SENDER) > 2):
+        searchQuery.append("OR")
+        searchQuery.append(["FROM", TRUSTED_SENDER[0]])
+        searchQuery.append(["FROM", TRUSTED_SENDER[1]])
+        for m in range(2, len(TRUSTED_SENDER)):
+            searchQuery.insert(0, ["FROM", TRUSTED_SENDER[m]])
+            searchQuery.insert(0, "OR")
+            searchQuery.insert(0, "UNSEEN")
+    print("search", searchQuery)
+    return searchQuery
 
 
 def get_unread():
@@ -24,7 +48,7 @@ def get_unread():
     Get unreaded mails
     returns the mails as raw data or None if nothings found
     """
-    uids = i.search(['UNSEEN'])
+    uids = i.search(build_search_query())
     if not uids:
         return None
     else:
@@ -37,7 +61,7 @@ def get_unread():
 def isValidSender(sender):
     """
     Check if the given sender is valid
-    It compars it with vordefined arrays  
+    It compars it with vordefined arrays
     """
     if sender not in TRUSTED_SENDER:
         print("Unread is from %s skipping" % (sender))
@@ -58,16 +82,31 @@ def analyze_msg(raws, a):
         return None
     text = msg.text_part.get_payload().decode(msg.text_part.charset)
     cmds = text.replace("\r", "").split("\n")
+    if cmds[1] not in commands:
+        print("not in commands")
+        return False
+    else:
+        return cmds
 
 
 imap_init()
-msgs = get_unread()
+emails = get_unread()
 
-if msgs is not None:
-    for msg in msgs.keys():
-        print(type(msg))
-        if type(msg) is not int:
-            continue
-        cmds = analyze_msg(msgs, msg)
-else:
-    print("No new Mails")
+""" while True:
+    try:
+        emails = get_unread()
+        while emails is None:
+            time.sleep(check_freq)
+            emails = get_unread()
+        for email in emails.keys():
+            if type(email) is not int:
+                continue
+            cmds = analyze_msg(emails, email)
+            if cmds is None:
+                continue
+            elif cmds is False:
+                print("command is invalid")
+            else:
+                print("command recieved: \n %s" % cmds)
+    except KeyboardInterrupt:
+        i.logout() """
