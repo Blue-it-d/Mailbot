@@ -11,10 +11,10 @@ def imap_init():
     Initialize IMAP connction
     """
    # print("Initializing IMAP....", end="")
-    global i
-    i = imapclient.IMAPClient(imapserver)
-    c = i.login(bot_address, pwd)
-    select_info = i.select_folder("INBOX", readonly=True)
+    global imapObj
+    imapObj = imapclient.IMAPClient(imapserver)
+    c = imapObj.login(bot_address, pwd)
+    select_info = imapObj.select_folder("INBOX", readonly=True)
     print('%d messages in INBOX' % select_info[b'EXISTS'])
     # i.select_folder("INBOX")
     print("DONE. ")
@@ -48,14 +48,14 @@ def get_unread():
     Get unreaded mails
     returns the mails as raw data or None if nothings found
     """
-    uids = i.search(build_search_query())
+    uids = imapObj.search(build_search_query())
     if not uids:
         return None
     else:
         print("Found %s unreads" % len(uids))
         # TODO: Remove readonly=true as these is now true
         # for testing purpose.
-        return i.fetch(uids, ['BODY[]', 'FLAGS'])
+        return imapObj.fetch(uids, ['BODY[]', 'FLAGS'])
 
 
 def isValidSender(sender):
@@ -69,13 +69,20 @@ def isValidSender(sender):
     return True
 
 
+def analyze_content(mails, key):
+    msg = pyzmail.PyzMessage.factory(emails[key][b'BODY[]'])
+    sender = msg.get_address("from")
+    if msg.text_part is None:
+        print("E-Mail has no content")
+        return None
+    text = msg.text_part.get_payload().decode(msg.text_part.charset)
+    return text
+
+
 def analyze_msg(raws, a):
     print("Analyzing message with uid " + str(a))
     msg = pyzmail.PyzMessage.factory(raws[a][b'BODY[]'])
     sender = msg.get_address("from")
-    # Check if a valid sender
-    if not isValidSender(sender[1]):
-        return None
     global subject
     if msg.text_part is None:
         print("No text part, cannot parse")
@@ -91,6 +98,11 @@ def analyze_msg(raws, a):
 
 imap_init()
 emails = get_unread()
+# Analyze only the first mail
+# TODO: loop to check all emails.
+x = analyze_content(emails, list(emails.keys())[0])
+if x is not None:
+    print(x)
 
 """ while True:
     try:
