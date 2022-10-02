@@ -1,5 +1,7 @@
 from config import *
 import imapclient
+import smtplib
+import email
 import pyzmail
 import time
 
@@ -95,6 +97,22 @@ def analyze_msg(raws, a):
     else:
         return cmds
 
+
+def sendEmail(reciver, text):
+    s = smtplib.SMTP("imap-mail.outlook.com", 587)
+    s.starttls()
+    s.ehlo()
+    s.login(bot_address, pwd)
+    msg = email.message.EmailMessage()
+    msg['from'] = bot_address
+    msg["to"] = reciver
+    msg["Subject"] = "Re: Thanks! "
+    msg.set_content(text)
+    res = s.send_message(msg)
+    print("sent successfully")
+
+
+#sendEmail("example.com", """Some text for test """)
 
 imap_init()
 emails = get_unread()
