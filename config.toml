@@ -3,6 +3,9 @@ imapserver = "imap-mail.outlook.com"
 bot_address = "blueit@outlook.de"
 password = "xx"
 
+smtpserver = "smtp-mail.outlook.com"
+port = 587
+
 check_freq = 5
 
 trusted_senders = ["test@hotmail.com", "test2@hotmail.com"]

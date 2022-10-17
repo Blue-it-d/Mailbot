@@ -97,22 +97,24 @@ def analyze_msg(raws, a):
     else:
         return cmds
 
-
+# Not tested yet
 def sendEmail(reciver, text):
-    s = smtplib.SMTP("imap-mail.outlook.com", 587)
+    ''' Send an Email to the given reciver with the given text'''
+    s = smtplib.SMTP(SMTP_SERVER, 587)
     s.starttls()
     s.ehlo()
     s.login(bot_address, pwd)
     msg = email.message.EmailMessage()
     msg['from'] = bot_address
     msg["to"] = reciver
+    # replace with real message and subject
     msg["Subject"] = "Re: Thanks! "
     msg.set_content(text)
     res = s.send_message(msg)
     print("sent successfully")
+    s.quit()
 
 
-#sendEmail("example.com", """Some text for test """)
 
 imap_init()
 emails = get_unread()
