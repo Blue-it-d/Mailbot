@@ -9,7 +9,7 @@ imapserver = content_dict['imapserver']
 bot_address = content_dict['bot_address']
 TRUSTED_SENDERS = content_dict['trusted_senders']
 pwd = content_dict['password']
-smtp_server = content_dict['smtpserver']
+SMTP_SERVER = content_dict['smtpserver']
 
 if not pwd:
     pwd = getpass.getpass("Account password:")
