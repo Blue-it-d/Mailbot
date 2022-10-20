@@ -5,6 +5,8 @@ import email
 import pyzmail
 import time
 
+import controlweb
+
 TRUSTED_SENDERS = ("test@hotmail.com", "test2@hotmail.com",)
 
 
@@ -116,14 +118,18 @@ def sendEmail(reciver, text):
 
 
 
-imap_init()
+from controlweb.controlweb import control_web
+obj = control_web()
+obj.navigiate_to("https://python.org")
+
+""" imap_init()
 emails = get_unread()
 # Analyze only the first mail
 # TODO: loop to check all emails.
 x = analyze_content(emails, list(emails.keys())[0])
 if x is not None:
     print(x)
-
+ """
 """ while True:
     try:
         emails = get_unread()
