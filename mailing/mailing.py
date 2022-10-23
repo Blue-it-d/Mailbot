@@ -55,10 +55,16 @@ class IAMP:
         msg = pyzmail.PyzMessage.factory(mails[key][b'BODY[]'])
         # Check if message is empty
         if msg.text_part is None:
-            print("Email is empty")
+            print("No text part, cannot parse")
             return None
         text = msg.text_part.get_payload().decode(msg.text_part.charset)
         return text
+         """ cmds = text.replace("\r", "").split("\n")
+    if cmds[1] not in commands:
+        print("not in commands")
+        return False
+    else:
+        return cmds """
 
 # SMTP Object
 class SMTP:
