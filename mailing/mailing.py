@@ -12,7 +12,8 @@ class IAMP:
         self.imapObj.select_folder("INBOX", readonly=True)
         #print('%d messages in INBOX' % select_info[b'EXISTS'])
     
-    def build_search_query(self):
+    @staticmethod
+    def build_search_query():
         '''
          Retrun only unseen Emails and from trusted Email-Addresses.
         '''
