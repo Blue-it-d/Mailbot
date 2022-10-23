@@ -46,8 +46,9 @@ class IAMP:
         else:
             print("Found %s unreads" % len(uids))
             return self.imapObj.fetch(uids, ['BODY[]', 'FLAGS'])
-
-    def analyze_content(self, mails, key):
+    
+    @staticmethod
+    def get_content(mails, key):
         """
         Analyze the content of the email
         It retruns the content of the email or None if the Email is empty
@@ -59,12 +60,7 @@ class IAMP:
             return None
         text = msg.text_part.get_payload().decode(msg.text_part.charset)
         return text
-         """ cmds = text.replace("\r", "").split("\n")
-    if cmds[1] not in commands:
-        print("not in commands")
-        return False
-    else:
-        return cmds """
+
 
 # SMTP Object
 class SMTP:
@@ -93,12 +89,12 @@ class SMTP:
         self.smtpObj.quit()
 
 
-smtp_obj = SMTP()
+# For tests
+
+""" smtp_obj = SMTP()
 # send email to example.come with the content: "Hello World"
 smtp_obj.send_email("example.com", "Hello World", "Hello World")
 smtp_obj.quit()
-
-
 
 iamp = IAMP()
 #iamp.imapObj.idle()
@@ -109,3 +105,4 @@ if unread:
     print("content", content)
 else:
     print("no Mails")
+ """
