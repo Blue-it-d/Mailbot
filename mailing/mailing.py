@@ -2,6 +2,7 @@ from config import *
 import imapclient
 import email
 import pyzmail
+import smtplib
 
 # IAMP Object
 class IAMP:
@@ -10,7 +11,7 @@ class IAMP:
         self.imapObj.login(bot_address, pwd)
         self.imapObj.select_folder("INBOX", readonly=True)
         #print('%d messages in INBOX' % select_info[b'EXISTS'])
-
+    
     def build_search_query(self):
         '''
          Retrun only unseen Emails and from trusted Email-Addresses.
@@ -57,6 +58,38 @@ class IAMP:
             return None
         text = msg.text_part.get_payload().decode(msg.text_part.charset)
         return text
+
+# SMTP Object
+class SMTP:
+    def __init__(self):
+        self.smtpObj = smtplib.SMTP(SMTP_SERVER, 587)
+        self.smtpObj.ehlo()
+        self.smtpObj.starttls()
+        self.smtpObj.login(bot_address, pwd)
+
+    def send_email(self, to, subject, content):
+        """
+        Send an email
+        """
+        msg = email.message.EmailMessage()
+        msg['Subject'] = subject
+        msg['From'] = bot_address
+        msg['To'] = to
+        msg.set_content(content)
+        self.smtpObj.send_message(msg)
+        print("Email sent to %s" % to)
+
+    def quit(self):
+        """
+        Quit the SMTP connection
+        """
+        self.smtpObj.quit()
+
+
+smtp_obj = SMTP()
+# send email to example.come with the content: "Hello World"
+smtp_obj.send_email("example.com", "Hello World", "Hello World")
+smtp_obj.quit()
 
 
 

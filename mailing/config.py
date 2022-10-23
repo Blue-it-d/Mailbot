@@ -5,6 +5,7 @@ import tomli
 with open('../config.toml') as file:
     content = file.read()
     content_dict = tomli.loads(content)
+    
 imapserver = content_dict['imapserver']
 bot_address = content_dict['bot_address']
 TRUSTED_SENDERS = content_dict['trusted_senders']
