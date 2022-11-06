@@ -2,7 +2,7 @@ import getpass
 import os
 import tomli
 
-with open('../config.toml') as file:
+with open('./config.toml') as file:
     content = file.read()
     content_dict = tomli.loads(content)
     

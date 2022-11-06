@@ -1,0 +1,4 @@
+**** pyzmail is not supoorted anye more --> use pip3 install pyzmail36
+
+**** WArning with pip3 -r install requirements.txt ---> update setuptools 
+pip3 install --upgrade --user setuptools==58.3.0
