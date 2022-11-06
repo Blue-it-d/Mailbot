@@ -70,15 +70,26 @@ class SMTP:
         self.smtpObj.starttls()
         self.smtpObj.login(bot_address, pwd)
 
-    def send_email(self, to, subject, content):
+    def send_email(self, to, subject, content, file):
         """
-        Send an email
+        Send an email to the given address with the given subject and content 
+        and attach the given file if it exists otherwise it will be ignored.
         """
         msg = email.message.EmailMessage()
         msg['Subject'] = subject
         msg['From'] = bot_address
         msg['To'] = to
         msg.set_content(content)
+        if file is not None:
+            try:
+                with open(file, "rb") as f:
+                    file_data = f.read()
+                    file_name = f.name
+            except FileNotFoundError:
+                file_data = None
+                file_name = None
+            if file_data is not None:
+                msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
         self.smtpObj.send_message(msg)
         print("Email sent to %s" % to)
 

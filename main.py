@@ -17,6 +17,7 @@ def isValidSender(sender):
 from mailing.mailing import IAMP
 from controlweb.jobs import commands, add_user_data, add_contract_data, add_department_data
 
+""" 
 iamp_obj = IAMP()
 mails = iamp_obj.get_unread()
 
@@ -32,6 +33,17 @@ if mails is not None:
                 commands[cmd]()
         else:
             print("No content")
+ """
+
+# Test sending Email
+from mailing.mailing import SMTP
+
+smtp_obj = SMTP()
+# load pdf file to send it
+# dont throw an error if the file is not found
+
+smtp_obj.send_email("example@hotmail.com", "Hello World", "Hello World", "pdf.pdf")
+smtp_obj.quit()
 
 """ from controlweb.controlweb import control_web
 obj = control_web()
