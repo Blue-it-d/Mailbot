@@ -3,3 +3,4 @@ pyzmail36==1.0.5
 tomli==2.0.1
 spacy==3.4.2
 fpdf==1.7.2
+seleniu==4.6.0
