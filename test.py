@@ -20,3 +20,35 @@ patterns = [
 ruler.add_patterns(patterns)           
 doc = nlp("TSome Text to be matched")
 print([(ent.text, ent.label_) for ent in doc.ents])
+
+
+add_user_token = ("ADD", "USER")
+add_rule = {
+    "label": add_user_token["ADD"],
+    "match_pattern": [
+        {"LEMMA": {"REGEX": "(legen|anlegen|erstellen|hinzufügen|einfügen|eintragen)"}},
+        # Add better Patterns
+    ],
+    "weight": 1.0,
+    "indispensable": True,
+}
+
+user_rule = {
+    "label": add_user_token["USER"],
+    "match_pattern": [
+        {"LEMMA": {"REGEX": "(nutzer|user|hilfskraft|person)"}},],
+        # Add better Patterns
+        "weight": 1.5,
+        "indispensable": True,
+    }
+
+# Rule based matcher: add contract
+add_contract_token = ("ADD", "CONTRACT")
+contract_rule = {
+    "label": add_contract_token["CONTRACT"],
+    "match_pattern": [
+        {"LEMMA": {"REGEX": "(vertrag|arbeitsvertrag|Hilfskraftarbeitsvertrag)"}},],
+        # Add better Patterns
+        "weight": 1.5,
+        "indispensable": True,
+    }
