@@ -16,10 +16,12 @@ bezeichnung: HSP Urlaubsstunden: 20, Überstunden aus vorherigem Vertrag:
 Danke.
 """
 
+
 def save_to_file(text) -> None:
     """Save given text to a file."""
     with open("tmp.txt", "w", encoding="utf-8") as file:
         file.write(text)
+
 
 def delete_file(name="tmp.txt"):
     """Delete the file with the given name."""
@@ -40,20 +42,19 @@ def text_preprocessing(text):
     # this is used to save text to a file in case something goes wrong
     save_to_file(text)
 
-    
     # split text in lines and remove empty
     lines = [line for line in text.splitlines() if line.strip()]
     # Return none if the text is empty
     if not lines:
         return None
-        
+
     # check if first line contains a greeting word
     for word in lines[0].split():
         if word.lower() in GREETING_INPUTS:
             # remove greeting from text
             lines = lines[1:]
             break
-    
+
     if not lines:
         return None
 
@@ -71,7 +72,6 @@ def text_preprocessing(text):
     return " ".join(key_list)
 
 
-
 # Chatbot intent classification
 # Rule-based pattern matching
 # https://spacy.io/usage/rule-based-matching
@@ -81,13 +81,14 @@ def intent_detection(text):
     """
     nlp = spacy.load("de_core_news_sm")
     ruler = nlp.add_pipe("entity_ruler", before="ner")
-    patterns = [ADD_PATTERN, USER_PATTERN, CONTRACT_PATTERN, DEPARTMENT_PATTERN]
+    patterns = [ADD_PATTERN, USER_PATTERN,
+                CONTRACT_PATTERN, DEPARTMENT_PATTERN]
     ruler.add_patterns(patterns)
     doc = nlp(text)
     print("ents", len(list(doc.ents)))
-        
+
     print([(ent.text, ent.label_) for ent in doc.ents])
-    return [(ent.text, ent.label_) for ent in doc.ents]
+    return [(ent.label_) for ent in doc.ents]
 
 
 def check(text):
@@ -114,10 +115,9 @@ def check(text):
     print([(ent.text, ent.label_) for ent in doc.ents])
 
 
-
 processed_text = text_preprocessing(TEXT)
- 
-if processed_text:
-     intent_detection(processed_text)
 
+if processed_text:
+    x = intent_detection(processed_text)
+    print(x)
 # check type of a variable
