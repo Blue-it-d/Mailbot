@@ -1,9 +1,11 @@
 #from controlweb.jobs import add_user, add_department, add_contract
 
+import os
+
 import spacy
 from patterns import GREETING_INPUTS
 
-text = """
+TEXT = """
 Moin bot, 
 ich muss einen Nutzer mit folgenden Informationen hinzufügen:
 Vorname: Mustermann, Nachname: Müller, geb. am: 04.04.1991, Anschrift:
@@ -14,13 +16,13 @@ bezeichnung: HSP Urlaubsstunden: 20, Überstunden aus vorherigem Vertrag:
 Danke.
 """
 
-# Function to save text to a file
-def save_text(text):
-    with open("tmp.txt", "w") as file:
+def save_to_file(text) -> None:
+    """Save given text to a file."""
+    with open("tmp.txt", "w", encoding="utf-8") as file:
         file.write(text)
-# Function to delete the file
+
 def delete_file(name="tmp.txt"):
-    import os
+    """Delete the file with the given name."""
     os.remove(name)
 
 
@@ -36,7 +38,7 @@ def text_preprocessing(text):
     - this will apply to the first sentence after the greeting.
     """
     # this is used to save text to a file in case something goes wrong
-    save_text(text)
+    save_to_file(text)
 
     # split text in lines and remove empty
     lines = [line for line in text.splitlines() if line.strip()]
