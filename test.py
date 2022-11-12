@@ -52,3 +52,40 @@ contract_rule = {
         "weight": 1.5,
         "indispensable": True,
     }
+
+
+
+
+
+"""
+NLU that focuses on organizing the
+user’s unstructured input such that the chatbot can understand and analyze it.
+It contains:
+ Syntax analysis: the process of analyzing the structure of a sentence
+    - Tokenization
+    - Part-of-speech tagging
+    - Dependency parsing
+    - Lemmatization
+    - Named entity recognition
+    - Reducing words into their roots for better analysis.
+    - Fillter out stop words
+
+Semantic analysis: the process of analyzing the meaning of a sentence
+    - distinguishing the context of each word
+    - understand the relationships between the words in the text.
+
+
+NLU models utilize:
+    - Supervised machine learning for syntax analysis steps (tokenization, PoS tagging), such as
+support vector machines (SVM), Bayesian networks, and maximum entropy algorithms.
+    - Unsupervised machine learning for semantic analysis such as clustering algorithms.
+
+ Intent classification:
+ Cassifiers are trained on relevant dataset to predict the intent of the user.
+
+ classification utlize:
+    - Rules-based pattern matching
+    - Machine learning classification algorithms such as decision trees, naive Bayes, and logistic
+regression.
+    - Deep learning such as artificial neural networks
+"""
