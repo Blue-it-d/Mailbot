@@ -1,7 +1,11 @@
+#from controlweb.jobs import add_user, add_department, add_contract
+
 import spacy
+from patterns import GREETING_INPUTS
+
 text = """
 Moin bot, 
-ich moechte einen Fachbereich mit folgenden Informationen eintragen:
+ich muss einen Nutzer mit folgenden Informationen hinzufügen:
 Vorname: Mustermann, Nachname: Müller, geb. am: 04.04.1991, Anschrift:
 BeispielStraße 11 49074 Osnabrück, Arbeitsstunden: 30, Startdatum: 1-1-
 2023, Enddatum: 31-12-2021, Arbeitsgruppe: Softwareengeniering Projekt-
@@ -9,108 +13,54 @@ bezeichnung: HSP Urlaubsstunden: 20, Überstunden aus vorherigem Vertrag:
 10
 Danke.
 """
-x = text.splitlines()
-""" print(text.splitlines())
-print(list(filter(None, x)))
- """
+
+# Function to save text to a file
+def save_text(text):
+    with open("tmp.txt", "w") as file:
+        file.write(text)
+# Function to delete the file
+def delete_file(name="tmp.txt"):
+    import os
+    os.remove(name)
 
 
-def extract_phone_numbers(string):
-    r = re.compile(
-        r'(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})')
-    phone_numbers = r.findall(string)
-    return [re.sub(r'\D', '', number) for number in phone_numbers]
+def text_preprocessing(text):
+    """
+    - remove greeting and extruct the first line 
+    - remove empty lines
+    - Split text in smaller segments "Tokens"
+    - Labeling the tokens with POS
+    - Reduce words into thier roots for better analysis "lemmatization"
+    - Filter out fillings and stop words 
+    - then generate essential words with only the nouns and verbs with spacy
+    - this will apply to the first sentence after the greeting.
+    """
+    # this is used to save text to a file in case something goes wrong
+    save_text(text)
 
-
-def extract_email_addresses(string):
-    r = re.compile(r'[\w\.-]+@[\w\.-]+')
-    return r.findall(string)
-
-#
-# nlp = spacy.load("de_core_news_sm")
-
-
-GREETING_INPUTS = ("hello", "hi", "greetings", "sup", "what's up", "hey",
-                   "hallo", "guten tag", "guten morgen", "guten abend", "guten nacht", "Moin")
-
-# genreating essential keys nlp
-
-
-def generate_keys(text):
     # split text in lines and remove empty
     lines = [line for line in text.splitlines() if line.strip()]
+
     # check if first line is empty or greeting
     if (word in lines[0].lower for word in GREETING_INPUTS):
         lines.pop(0)
 
-    """ 
-       for greeting in GREETING_INPUTS:
-        if greeting in lines[0].lower():
-            lines.pop(0)
-            break
-     """
-
-    # tokenize the
     nlp = spacy.load("de_core_news_sm")
+    # split text in tokens for the first line afret the greeting
     doc = nlp(lines[0])
 
     key_list = []
+    # Extracting the essential words (verbs and nouns)
+    for token in doc:
+        if token.pos_ in ["NOUN", "VERB"]:
+            # save the lemmatized word
+            key_list.append(token.lemma_)
 
-    for d in doc:
-        #print(d, d.pos_, d.lemma_, d.dep_, d.head, d.head.pos_)
-        # add to key list if it is a noun or a verb
-        if (d.pos_ == "NOUN") or (d.pos_ == "VERB"):
-            key_list.append(d.lemma_)
+    delete_file()
     return key_list
 
-# print(generate_keys(text))
 
-# function to add user
-
-
-def add_user():
-    print("add user")
-
-
-def add_contract():
-    print("add contract")
-
-
-def add_project():
-    print("add project")
-
-
-""" ess_words = generate_keys(text)
-#print(ess_words)
-add_user_pattern = [["Arbeitsvertrag", "legen"], ["Arbeitsvertrag", "anlegen"], 
-                    ["Arbeitsvertrag", "erstellen"], ["Arbeitsvertrag", "hinyufügen"]],
-
- """
-
-
-def text_processing(text):
-    """
-    remove greeting and extruct the first line 
-    then generate essential words with only the nouns and verbs with spacy
-    """
-    # split text in lines and remove empty
-    lines = [line for line in text.splitlines() if line.strip()]
-    # check if first line is empty or greeting
-    if (word in lines[0].lower for word in GREETING_INPUTS):
-        lines.pop(0)
-
-    # tokenize the
-    nlp = spacy.load("de_core_news_sm")
-    doc = nlp(lines[0])
-
-    key_list = []
-
-    for d in doc:
-        #print(d, d.pos_, d.lemma_, d.dep_, d.head, d.head.pos_)
-        # add to key list if it is a noun or a verb
-        if (d.pos_ == "NOUN") or (d.pos_ == "VERB"):
-            key_list.append(d.lemma_)
-    return key_list
+print(text_preprocessing(text))
 
 
 def check(text):
@@ -137,9 +87,10 @@ def check(text):
     print([(ent.text, ent.label_) for ent in doc.ents])
 
 
-x = text_processing(text)
+""" x = tex_preproccessing(text)
 # rejoin the return list to a string
 print(x)
 x = " ".join(x)
 print(x)
 check(x)
+ """
