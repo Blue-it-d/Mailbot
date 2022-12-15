@@ -1,16 +1,16 @@
+"""Configuration file for the mailing bot."""
 import getpass
-import os
 import tomli
 
-with open('./config.toml') as file:
+with open('./mail-config.toml', encoding="utf-8") as file:
     content = file.read()
-    content_dict = tomli.loads(content)
-    
+    content_dict = tomli.loads(content) 
 imapserver = content_dict['imapserver']
 bot_address = content_dict['bot_address']
 TRUSTED_SENDERS = content_dict['trusted_senders']
 pwd = content_dict['password']
 SMTP_SERVER = content_dict['smtpserver']
+
 
 if not pwd:
     pwd = getpass.getpass("Account password:")

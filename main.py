@@ -1,5 +1,7 @@
 from mailing.config import *
-import controlweb
+from mailing.mailing import SMTP
+
+#import controlweb
 
 def isValidSender(sender):
     """
@@ -15,7 +17,7 @@ def isValidSender(sender):
 
 # import IAMP class
 from mailing.mailing import IAMP
-from controlweb.jobs import commands, add_user_data, add_contract_data, add_department_data
+#from controlweb.jobs import commands, add_user_data, add_contract_data, add_department_data
 
 """ 
 iamp_obj = IAMP()
@@ -36,7 +38,6 @@ if mails is not None:
  """
 
 # Test sending Email
-from mailing.mailing import SMTP
 
 smtp_obj = SMTP()
 # load pdf file to send it

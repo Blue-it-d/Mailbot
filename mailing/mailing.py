@@ -1,8 +1,10 @@
-from config import *
-import imapclient
+"""Module providing classes to deal with Mails."""
+
 import email
-import pyzmail
 import smtplib
+import imapclient
+import pyzmail
+from config import *
 
 # IAMP Object
 class IAMP:
@@ -65,10 +67,12 @@ class IAMP:
 # SMTP Object
 class SMTP:
     def __init__(self):
+        print(SMTP_SERVER, pwd, bot_address)
         self.smtpObj = smtplib.SMTP(SMTP_SERVER, 587)
         self.smtpObj.ehlo()
         self.smtpObj.starttls()
         self.smtpObj.login(bot_address, pwd)
+
 
     def send_email(self, to, subject, content, file):
         """

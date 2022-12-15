@@ -1,0 +1,18 @@
+# Server für eintreffende E-Mails
+imapserver = "imap-mail.outlook.com"
+
+
+# Server für ausgehende E-Mails:
+smtpserver = "smtp-mail.outlook.com"
+port = 587
+
+# Email-Addresse und Paswort des Bots:
+bot_address = "example@domain.com"
+password = "ExamplePassword"
+
+# Wie oft soll das Postfach gefrüft wird: 
+check_freq = 5
+
+# Die berechtigten Email-Addressen, denen der Bot vertraut:
+trusted_senders = ["test@hotmail.com", "test2@hotmail.com"]
+                  
